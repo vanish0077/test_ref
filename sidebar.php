@@ -1,10 +1,33 @@
 <?php
 // sidebar.php
+// Используем глобальную $action для подсветки
 ?>
-<div class="sidebar-title">Панель управления</div>
-<nav>
-    <a href="?action=upgrade" class="<?= ($_GET['action'] ?? '') == 'upgrade' ? 'active' : '' ?>">🚀 Улучшение кода</a>
-    <a href="?action=import" class="<?= ($_GET['action'] ?? '') == 'import' ? 'active' : '' ?>">📥 Импорт информации</a>
-    <a href="?action=create" class="<?= ($_GET['action'] ?? '') == 'create' ? 'active' : '' ?>">🏗️ Создание элементов</a>
-</nav>
-<div class="sidebar-footer">v 1.0.3</div>
+<div style="padding: 25px 20px; font-weight: bold; font-size: 1.2em; letter-spacing: 1px; color: #fff; border-bottom: 1px solid #334155;">
+    ASPRO CRM
+</div>
+<ul>
+    <li>
+        <a href="?action=home" class="<?php echo ($action === 'home') ? 'active' : ''; ?>">
+            🏠 Главная
+        </a>
+    </li>
+    <li>
+        <a href="?action=upgrade" class="<?php echo ($action === 'upgrade') ? 'active' : ''; ?>">
+            🚀 Улучшение кода
+        </a>
+    </li>
+    <li>
+        <a href="?action=import" class="<?php echo ($action === 'import') ? 'active' : ''; ?>">
+            📥 Импорт контента
+        </a>
+    </li>
+    <li>
+        <a href="?action=create" class="<?php echo ($action === 'create') ? 'active' : ''; ?>">
+            📄 Создание страниц
+        </a>
+    </li>
+</ul>
+
+<div style="position: absolute; bottom: 20px; left: 20px; font-size: 0.8em; color: #64748b;">
+    v 1.2.5
+</div>
