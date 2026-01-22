@@ -158,46 +158,53 @@ if (isset($_GET['tree'])) {
   
     $html = '<div id="file-tree-root">';
   
-    function renderFolderContent_upgrade($dirPath, $relBase, $level = 1) {
-        global $excluded_dirs, $excluded_files;
-        $items = @scandir($dirPath);
-        if ($items === false) return '';
-        $content = '';
-        $hasFiles = false;
-        $hasSubdirs = false;
-        foreach ($items as $item) {
-            if ($item === '.' || $item === '..') continue;
-            if (is_dir($dirPath . '/' . $item) && in_array($item, $excluded_dirs)) continue;
+function renderFolderContent_upgrade($dirPath, $relBase, $level = 1) {
+    $excluded_dirs = ['bitrix', 'modules', 'upload', 'local', '.git', 'cgi-bin', 'personal', 'admin', 'include', 'css', 'js', 'vendor', 'ajax', 'aspro_regions', 'auth'];
+    $excluded_files = ['access.php', 'page_generation.php','robots.php','sitemap.php', '.bottom.menu.php', '.bottom_company.menu.php', '.bottom_help.menu.php', '.bottom_info.menu.php', '.cabinet.menu.php', '.htaccess', 'import.php','.htaccess_back', 'indexblocks_index1.php' ,'.left.menu.php', '.only_catalog.menu.php', '.section.php', '.subtop_content_multilevel.menu.php', '.top.menu.php', '.top_catalog_sections.menu.php', '.top_catalog_sections.menu_ext.php', '.top_catalog_wide.menu.php', '.top_catalog_wide.menu_ext.php', '.top_content_multilevel.menu.php', '404.php', 'urlrewrite.php'];
 
-            $fullPath = $dirPath . '/' . $item;
-            if (!is_readable($fullPath)) continue;
-            $relPath = rtrim($relBase, '/') . '/' . $item;
-            if (is_dir($fullPath)) {
-                $subContent = '';
-                if ($level < 2) { 
-                    $subContent = renderFolderContent_upgrade($fullPath, $relPath, $level + 1); 
-                }
-                $detailsContent = '<ul style="list-style-type: none; padding-left: 0;">';
-                if (!empty($subContent)) {
-                    $detailsContent .= $subContent;
-                } else {
-                    $detailsContent .= '<li style="margin:5px 0; padding-left: ' . (($level + 1) * 15) . 'px; color: #6b7280; font-style: italic; padding: 8px 0;">Нет файлов для обработки</li>';
-                }
-                $detailsContent .= '</ul>';
-                $content .= '<details class="folder-details" style="padding-left: ' . ($level * 15) . 'px;"><summary class="folder-header"><strong>' . htmlspecialchars($item) . '/</strong></summary>' . $detailsContent . '</details>';
-                $hasSubdirs = true;
-            } else {
-                $ext = strtolower(pathinfo($item, PATHINFO_EXTENSION));
-                if ($ext !== 'php' || in_array($item, $excluded_files) || $item[0] === '.') continue;
-                $hasFiles = true;
-                $content .= '<li style="margin:5px 0; padding-left: ' . ($level * 15) . 'px;"><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="file-checkbox" value="' . htmlspecialchars($relPath, ENT_QUOTES) . '">' . htmlspecialchars($item) . '</label></li>';
+    $items = @scandir($dirPath);
+    if ($items === false) return '';
+    $content = '';
+    $hasFiles = false;
+    $hasSubdirs = false;
+
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') continue;
+        
+        // 2. Используем локальные переменные
+        if (is_dir($dirPath . '/' . $item) && in_array($item, $excluded_dirs)) continue;
+
+        $fullPath = $dirPath . '/' . $item;
+        if (!is_readable($fullPath)) continue;
+        $relPath = rtrim($relBase, '/') . '/' . $item;
+
+        if (is_dir($fullPath)) {
+            $subContent = '';
+            if ($level < 2) { 
+                $subContent = renderFolderContent_upgrade($fullPath, $relPath, $level + 1); 
             }
+            $detailsContent = '<ul style="list-style-type: none; padding-left: 0;">';
+            $detailsContent .= (!empty($subContent)) ? $subContent : '<li style="margin:5px 0; padding-left: ' . (($level + 1) * 15) . 'px; color: #6b7280; font-style: italic; padding: 8px 0;">Нет файлов для обработки</li>';
+            $detailsContent .= '</ul>';
+            
+            $content .= '<details class="folder-details" style="padding-left: ' . ($level * 15) . 'px;"><summary class="folder-header"><strong>' . htmlspecialchars($item) . '/</strong></summary>' . $detailsContent . '</details>';
+            $hasSubdirs = true;
+        } else {
+            $ext = strtolower(pathinfo($item, PATHINFO_EXTENSION));
+            
+            // 3. Снова используем локальную переменную $excluded_files
+            if ($ext !== 'php' || in_array($item, $excluded_files) || $item[0] === '.') continue;
+            
+            $hasFiles = true;
+            $content .= '<li style="margin:5px 0; padding-left: ' . ($level * 15) . 'px;"><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="file-checkbox" value="' . htmlspecialchars($relPath, ENT_QUOTES) . '">' . htmlspecialchars($item) . '</label></li>';
         }
-        if (!$hasFiles && !$hasSubdirs) {
-            $content .= '<li style="margin:5px 0; padding-left: ' . ($level * 15) . 'px; color: #6b7280; font-style: italic; padding: 8px 0;">Нет файлов для обработки</li>';
-        }
-        return $content;
     }
+    
+    if (!$hasFiles && !$hasSubdirs) {
+        $content .= '<li style="margin:5px 0; padding-left: ' . ($level * 15) . 'px; color: #6b7280; font-style: italic; padding: 8px 0;">Нет файлов для обработки</li>';
+    }
+    return $content;
+}
 
     $level1 = @scandir($root);
     if ($level1 === false) { echo 'Ошибка чтения корня'; exit; }
