@@ -1,11 +1,10 @@
 <?php
-// sidebar.php в репозитории
+// sidebar.php
 ?>
-<h3>Меню</h3>
-<ul>
-    <li><a href="?page=create">Создать страницу</a></li>
-    <li><a href="?page=upgrade">Обновление</a></li>
-    <li><a href="?page=parser">Парсер</a></li>
-</ul>
-<hr>
-<small>Версия системы: 1.0.2</small>
+<div class="sidebar-title">Панель управления</div>
+<nav>
+    <a href="?action=upgrade" class="<?= ($_GET['action'] ?? '') == 'upgrade' ? 'active' : '' ?>">🚀 Улучшение кода</a>
+    <a href="?action=import" class="<?= ($_GET['action'] ?? '') == 'import' ? 'active' : '' ?>">📥 Импорт информации</a>
+    <a href="?action=create" class="<?= ($_GET['action'] ?? '') == 'create' ? 'active' : '' ?>">🏗️ Создание элементов</a>
+</nav>
+<div class="sidebar-footer">v 1.0.3</div>
