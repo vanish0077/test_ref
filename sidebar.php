@@ -26,5 +26,5 @@ $cssUrl = "https://cdn.jsdelivr.net/gh/vanish0077/test_ref@{$commitHash}/styles_
 </ul>
 
 <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 11px; color: #475569; letter-spacing: 1px;">
-    SYSTEM v1.2.5
+    SYSTEM v1.2.6
 </div>
