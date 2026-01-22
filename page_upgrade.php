@@ -295,7 +295,7 @@ function initCodeImprove_upgrade(){
    
     selectedFiles.clear();
 
-    fetch('?tree=1')
+    fetch('?action=upgrade&tree=1')
         .then(r => r.text())
         .then(html => {
             tree.innerHTML = html;
@@ -325,7 +325,7 @@ async function replaceFile_upgrade(relPath, newCode) {
     fd.append('path', relPath);
     fd.append('content', newCode);
 
-    const res = await fetch('', { method: 'POST', body: fd });
+    const res = await fetch('?action=upgrade', { method: 'POST', body: fd });
     if (!res.ok) {
         throw new Error(`Ошибка сервера: ${res.status}`);
     }
@@ -460,7 +460,7 @@ function addPreviewLogic_upgrade(button, code) {
             const fd = new FormData();
             fd.append('action', 'create_preview');
             fd.append('content', code);
-            const res = await fetch('', { method: 'POST', body: fd });
+            const res = await fetch('?action=upgrade', { method: 'POST', body: fd });
             if (!res.ok) throw new Error(`Ошибка сервера ${res.status}`);
             const data = await res.json();
             if (data.status !== 'success' || !data.url) {
@@ -477,7 +477,7 @@ function addPreviewLogic_upgrade(button, code) {
 }
 
 async function improveSingleFile_upgrade(relPath, settings) {
-    const res = await fetch('?file=' + encodeURIComponent(relPath));
+    const res = await fetch('?action=upgrade&file=' + encodeURIComponent(relPath));
     if (!res.ok) throw new Error(`Не удалось загрузить файл (${res.status})`);
     
     const code = await res.text();
