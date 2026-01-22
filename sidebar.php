@@ -1,13 +1,13 @@
 <?php
 // sidebar.php
-// Используем глобальную $action для подсветки
 ?>
-<div style="padding: 25px 20px; font-weight: bold; font-size: 1.2em; letter-spacing: 1px; color: #fff; border-bottom: 1px solid #334155;">
-    ASPRO CRM
+<div style="padding: 30px 20px; font-weight: 800; font-size: 1.3em; letter-spacing: 2px; color: #fff; text-align: center; background: rgba(0,0,0,0.2);">
+    ASPRO.PRO
 </div>
+
 <ul>
     <li>
-        <a href="?action=home" class="<?php echo ($action === 'home') ? 'active' : ''; ?>">
+        <a href="?action=home" class="<?php echo ($action === 'home' || $action === '') ? 'active' : ''; ?>">
             🏠 Главная
         </a>
     </li>
@@ -28,6 +28,6 @@
     </li>
 </ul>
 
-<div style="position: absolute; bottom: 20px; left: 20px; font-size: 0.8em; color: #64748b;">
-    v 1.2.5
+<div style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 11px; color: #475569; letter-spacing: 1px;">
+    SYSTEM v1.2.5
 </div>
